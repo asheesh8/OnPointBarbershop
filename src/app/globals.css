@@ -1,26 +1,353 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   ON POINT BARBERSHOP — "PRECISION AMERICANA"
+   --------------------------------------------------------------------------
+   The shop's real mark is a red/white/blue flag roundel with clippers and
+   shears. The old site buried that under brown-and-gold "luxury" styling that
+   belonged to no one. This system keeps the flag DNA and finds the premium
+   feeling in craft instead: midnight steel, bone paper, chrome, and one
+   surgical crimson that is never allowed to become decoration.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Ground — a near-black carrying a navy cast, never brown */
+  --ink: #0a0d12;
+  --ink-2: #10151d;
+  --ink-3: #171e28;
+  --ink-4: #212b38;
+
+  /* Paper */
+  --bone: #f2efe8;
+  --paper: #faf8f4;
+
+  /* The single accent. Two values: fills vs. text-on-dark. */
+  --crimson: #c8102e;        /* fills, rules, large display only */
+  --crimson-deep: #9e0c24;
+  --crimson-bright: #ff3b52; /* accent TEXT on dark — AA at 5.4:1 */
+
+  /* Steel — the connective tissue */
+  --steel: #7c8899;
+  --steel-light: #a9b4c2;
+  --steel-dim: #4a5563;
+
+  --line-dark: rgba(242, 239, 232, 0.14);
+  --line-light: rgba(10, 13, 18, 0.14);
+
+  --page-pad: clamp(1.25rem, 5vw, 6rem);
+  --header-h: 4.75rem;
+
+  /* Chrome — used on rules and the mark, sparingly */
+  --chrome: linear-gradient(
+    100deg,
+    #5c6773 0%, #c3ccd6 18%, #8b96a3 34%,
+    #eef2f6 50%, #8b96a3 66%, #c3ccd6 82%, #5c6773 100%
+  );
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-bone: var(--bone);
+  --color-paper: var(--paper);
+  --color-crimson: var(--crimson);
+  --color-crimson-deep: var(--crimson-deep);
+  --color-crimson-bright: var(--crimson-bright);
+  --color-steel: var(--steel);
+  --color-steel-light: var(--steel-light);
+  --color-steel-dim: var(--steel-dim);
+  --font-display: var(--font-archivo);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-plex-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--ink);
+  /* the sticky header must never cover an anchor target */
+  scroll-padding-top: var(--header-h);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--crimson); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--crimson-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+img, video { display: block; max-width: 100%; }
+
+/* --------------------------------------------------------------------------
+   TYPE
+   Archivo carries a real width axis, so the display face can be genuinely
+   condensed and heavy — the same voice as the arc lettering in the logo —
+   without faking it with transforms.
+   -------------------------------------------------------------------------- */
+
+.display {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 800;
+  font-stretch: 79%;
+  letter-spacing: -0.02em;
+  /* Condensing the face narrows the space glyph too. Without this the words
+     in a heavy display line run together. */
+  word-spacing: 0.12em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.display-tight { line-height: 0.86; }
+
+/* Wide variant for short, quiet statements */
+.display-wide {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 700;
+  font-stretch: 108%;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.mono {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.685rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Eyebrow: a mono label preceded by a short rule. Used at every section head. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.685rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+}
+.eyebrow::before {
+  content: "";
+  width: 1.75rem;
+  height: 2px;
+  background: var(--crimson);
+  flex: none;
+}
+.eyebrow--on-light { color: var(--crimson); }
+
+/* --------------------------------------------------------------------------
+   SURFACE TEXTURE
+   A single fixed grain sheet over the whole page. One element, no per-section
+   cost, and it stops the large flat darks from banding on cheap panels.
+   -------------------------------------------------------------------------- */
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   THE BARBER POLE
+   The brand's structural device. A helical stripe rendered as a repeating
+   gradient that translates along its own axis — the same illusion the real
+   pole uses. It appears as a section divider and inside the mark.
+   -------------------------------------------------------------------------- */
+
+@keyframes pole-scroll {
+  to { background-position: 0 -5.657rem; } /* 2 × stripe pitch, keeps it seamless */
+}
+
+.pole-rule {
+  height: 6px;
+  width: 100%;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--crimson) 0 0.75rem,
+    #f4f2ee 0.75rem 1.5rem,
+    #1b3a6b 1.5rem 2.25rem,
+    #f4f2ee 2.25rem 3rem
+  );
+  background-size: auto 5.657rem;
+  animation: pole-scroll 2.4s linear infinite;
+}
+
+.pole-vertical {
+  width: 8px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--crimson) 0 0.6rem,
+    #f4f2ee 0.6rem 1.2rem,
+    #1b3a6b 1.2rem 1.8rem,
+    #f4f2ee 1.8rem 2.4rem
+  );
+  background-size: auto 4.525rem;
+  animation: pole-scroll 3s linear infinite;
+}
+
+/* --------------------------------------------------------------------------
+   MOTION
+   -------------------------------------------------------------------------- */
+
+@keyframes kenburns {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to   { transform: scale(1.14) translate3d(-1.2%, -1.8%, 0); }
+}
+.animate-kenburns { animation: kenburns 26s ease-out forwards; }
+
+@keyframes marquee-x {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.animate-marquee { animation: marquee-x 68s linear infinite; }
+.animate-marquee-rev { animation: marquee-x 82s linear infinite reverse; }
+.marquee-host:hover .animate-marquee,
+.marquee-host:hover .animate-marquee-rev { animation-play-state: paused; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.82); }
+}
+.animate-pulse-dot { animation: pulse-dot 2.2s ease-in-out infinite; }
+
+@keyframes scroll-cue {
+  0%, 100% { transform: translateY(0); opacity: 0.9; }
+  50%      { transform: translateY(7px); opacity: 0.35; }
+}
+.animate-scroll-cue { animation: scroll-cue 2s ease-in-out infinite; }
+
+/* --------------------------------------------------------------------------
+   COMPONENTS
+   -------------------------------------------------------------------------- */
+
+/* The cut-line button. On hover a crimson panel wipes up from the baseline —
+   the same gesture as a clipper pass — rather than a colour cross-fade. */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 3.5rem;
+  padding: 0 1.6rem;
+  overflow: hidden;
+  border: 1px solid transparent;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  isolation: isolate;
+  transition: color 260ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  background: var(--crimson);
+  transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn:hover::before,
+.btn:focus-visible::before { transform: scaleY(1); }
+
+.btn--solid { background: var(--bone); color: var(--ink); }
+.btn--solid:hover, .btn--solid:focus-visible { color: #fff; }
+
+.btn--crimson { background: var(--crimson); color: #fff; }
+.btn--crimson::before { background: var(--bone); }
+.btn--crimson:hover, .btn--crimson:focus-visible { color: var(--ink); }
+
+.btn--ghost { border-color: var(--line-dark); color: var(--bone); }
+.btn--ghost:hover, .btn--ghost:focus-visible { color: #fff; border-color: var(--crimson); }
+
+.btn--ghost-dark { border-color: var(--line-light); color: var(--ink); }
+.btn--ghost-dark:hover, .btn--ghost-dark:focus-visible { color: #fff; border-color: var(--crimson); }
+
+/* Hairline rules that read as machined rather than drawn */
+.rule-dark { border-top: 1px solid var(--line-dark); }
+.rule-light { border-top: 1px solid var(--line-light); }
+
+.chrome-text {
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Numerals in the price menu must align in a column */
+.tnum { font-variant-numeric: tabular-nums; }
+
+.section {
+  padding-block: clamp(6.5rem, 12vw, 12rem);
+  padding-inline: var(--page-pad);
+}
+
+/* Standard gap between a section heading block and the content under it */
+.section-body { margin-top: clamp(3.5rem, 6vw, 5.5rem); }
+
+.shell { width: 100%; max-width: 84rem; margin-inline: auto; }
+
+/* Scroll-reveal base state. JS adds `.is-in`. */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition: opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-in { opacity: 1; transform: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: fixed; z-index: 100; top: 0.75rem; left: 0.75rem;
+  padding: 0.85rem 1.15rem; transform: translateY(-180%);
+  background: var(--bone); color: var(--ink);
+  font-family: var(--font-plex-mono), monospace; font-size: 0.7rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.skip-link:focus { transform: none; }
+
+/* Hide native scrollbar on the horizontal service rail without losing scroll */
+.no-bar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-bar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-kenburns, .animate-marquee, .animate-marquee-rev,
+  .animate-pulse-dot, .animate-scroll-cue,
+  .pole-rule, .pole-vertical { animation: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .btn::before { transition: none; }
 }

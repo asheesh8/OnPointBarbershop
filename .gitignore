@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Client photo originals and anything awaiting a model release.
+# This repo is public — these never get committed. See docs/pending-release/.
+/docs/pending-release/*
+!/docs/pending-release/README.md
+/docs/source-photos/
