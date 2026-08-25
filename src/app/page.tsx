@@ -5,6 +5,7 @@ import ReviewPull from '@/components/ReviewPull';
 import ServicesPreview from '@/components/ServicesPreview';
 import ShopCards from '@/components/ShopCards';
 import Standards from '@/components/Standards';
+import TeamPreview from '@/components/TeamPreview';
 
 /**
  * Home is a trailer, not the whole film: each block sells one idea and hands
@@ -17,6 +18,7 @@ export default function Home() {
       <ShopCards />
       <ServicesPreview />
       <RealWorkPreview />
+      <TeamPreview />
       <ReviewPull />
       <Standards />
       <ClosingCta />
