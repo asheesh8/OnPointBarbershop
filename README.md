@@ -11,6 +11,8 @@ npm run build
 
 ---
 
+**Live:** https://on-point-barbershop.vercel.app — Vercel, stock Next.js preset; pushes to `main` deploy to production. Static marketing site with no server code and no environment variables.
+
 ## The brand: "Precision Americana"
 
 The shop's real mark is a red-white-and-blue flag roundel with clippers and
